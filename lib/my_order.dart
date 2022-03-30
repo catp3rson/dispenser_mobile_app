@@ -39,6 +39,7 @@ class _MyOrderState extends State<MyOrder> {
                 FoodItem(),
                 FoodItem(),
                 FoodItem(),
+                AddMore()
               ],
             ))),
           ],
