@@ -1,4 +1,3 @@
-import 'package:dispenser_mobile_app/my_order.dart';
 import 'package:flutter/material.dart';
 
 class FoodItem extends StatelessWidget {

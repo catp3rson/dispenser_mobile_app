@@ -32,7 +32,7 @@ class _MyOrderState extends State<MyOrder> {
             Expanded(
                 child: SingleChildScrollView(
                     child: Column(
-              children: [
+              children: const [
                 FoodItem(),
                 FoodItem(),
                 FoodItem(),

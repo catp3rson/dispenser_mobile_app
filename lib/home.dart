@@ -1,8 +1,6 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:dispenser_mobile_app/order_item.dart';
 import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
-import 'package:dispenser_mobile_app/sidebar.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
