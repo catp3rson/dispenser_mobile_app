@@ -105,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+      title: 'Home',
     );
   }
 }

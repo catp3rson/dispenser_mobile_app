@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:dispenser_mobile_app/sidebar.dart';
 
 class Template extends StatefulWidget {
-  const Template({Key? key, required this.child}) : super(key: key);
+  const Template({Key? key, required this.child, required this.title})
+      : super(key: key);
   final Widget child;
+  final String title;
 
   @override
   State<Template> createState() => _TemplateState();
@@ -25,7 +27,7 @@ class _TemplateState extends State<Template> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            'Home',
+            widget.title,
             style: Theme.of(context).textTheme.headline1,
           ),
         ),

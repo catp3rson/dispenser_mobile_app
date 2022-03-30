@@ -1,3 +1,4 @@
+import 'package:dispenser_mobile_app/my_order.dart';
 import 'package:flutter/material.dart';
 
 class OrderItem extends StatelessWidget {
@@ -8,7 +9,12 @@ class OrderItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyOrder()),
+          );
+        },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15.0),
           child: Container(
