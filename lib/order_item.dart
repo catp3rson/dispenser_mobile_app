@@ -55,7 +55,13 @@ class OrderItem extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: IconButton(
                           icon: const Icon(Icons.remove_red_eye_sharp),
-                          onPressed: () {}),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyOrder()),
+                            );
+                          }),
                     ),
                   ),
                   IconButton(

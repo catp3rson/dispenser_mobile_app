@@ -256,20 +256,24 @@ class AddItem extends StatelessWidget {
                       child: Text(
                         'Add',
                         style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                           fontSize: 12,
                           color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.2,
                         )),
                       ),
                       style: TextButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor,
                         padding: EdgeInsets.zero,
-                        minimumSize: Size(50, 25),
+                        minimumSize: const Size(50, 25),
                         alignment: Alignment.center,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0)),
                       ),
-                      onPressed: () {}),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
                 ),
               )
             ],

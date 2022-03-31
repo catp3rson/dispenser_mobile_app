@@ -41,7 +41,7 @@ class SideBar extends StatelessWidget {
                           width: 71,
                           height: 71,
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 15),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -49,7 +49,6 @@ class SideBar extends StatelessWidget {
                             style: Theme.of(context).textTheme.headline2,
                           ),
                         ),
-                        const SizedBox(height: 10),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -96,7 +95,10 @@ class SideBar extends StatelessWidget {
                   ),
                   label: const Text(
                     'Log Out',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

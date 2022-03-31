@@ -1,3 +1,4 @@
+import 'package:dispenser_mobile_app/new_order.dart';
 import 'package:dispenser_mobile_app/order_item.dart';
 import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
@@ -67,9 +68,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const NewOrder()),
+                        );
+                      },
                       child: Text(
-                        'See all (12)',
+                        'Add new order',
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 15,

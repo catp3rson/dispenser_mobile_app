@@ -55,6 +55,7 @@ class _TemplateState extends State<Template> {
       body: Container(
           margin: const EdgeInsets.only(bottom: 15.0), child: widget.child),
       bottomNavigationBar: CurvedNavigationBar(
+        animationDuration: const Duration(milliseconds: 300),
         backgroundColor: Theme.of(context).backgroundColor,
         color: Theme.of(context).canvasColor,
         buttonBackgroundColor: Theme.of(context).primaryColor,
