@@ -1,6 +1,7 @@
 import 'package:dispenser_mobile_app/food_item.dart';
 import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyOrder extends StatefulWidget {
   const MyOrder({Key? key}) : super(key: key);
@@ -26,7 +27,8 @@ class _MyOrderState extends State<MyOrder> {
             const SizedBox(height: 10),
             Text(
               'My order 1',
-              style: Theme.of(context).textTheme.headline2,
+              style: GoogleFonts.poppins(
+                  textStyle: Theme.of(context).textTheme.headline2),
             ),
             const SizedBox(height: 10),
             Expanded(

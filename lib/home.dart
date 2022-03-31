@@ -2,6 +2,7 @@ import 'package:dispenser_mobile_app/new_order.dart';
 import 'package:dispenser_mobile_app/order_item.dart';
 import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -29,7 +30,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text(
               'Welcome User!',
-              style: Theme.of(context).textTheme.headline2,
+              style: GoogleFonts.poppins(
+                  textStyle: Theme.of(context).textTheme.headline2),
             ),
             const SizedBox(height: 15),
             Container(
@@ -62,7 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Text(
                   'Your order',
-                  style: Theme.of(context).textTheme.headline3,
+                  style: GoogleFonts.poppins(
+                      textStyle: Theme.of(context).textTheme.headline3),
                 ),
                 Expanded(
                   child: Align(

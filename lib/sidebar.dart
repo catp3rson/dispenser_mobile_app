@@ -46,14 +46,18 @@ class SideBar extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             'Welcome User!',
-                            style: Theme.of(context).textTheme.headline2,
+                            style: GoogleFonts.poppins(
+                                textStyle:
+                                    Theme.of(context).textTheme.headline2),
                           ),
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
                             'Staff ID: 5128654',
-                            style: Theme.of(context).textTheme.subtitle1,
+                            style: GoogleFonts.poppins(
+                                textStyle:
+                                    Theme.of(context).textTheme.subtitle1),
                           ),
                         ),
                       ],

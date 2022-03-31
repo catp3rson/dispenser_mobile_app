@@ -145,7 +145,10 @@ class AddMore extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       'Choose a product',
-                      style: Theme.of(context).textTheme.headline2,
+                      style: GoogleFonts.poppins(
+                          textStyle: GoogleFonts.poppins(
+                              textStyle:
+                                  Theme.of(context).textTheme.headline2)),
                     ),
                     const SizedBox(height: 15),
                     Expanded(

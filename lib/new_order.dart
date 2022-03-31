@@ -27,7 +27,8 @@ class _NewOrderState extends State<NewOrder> {
               children: [
                 Text(
                   'My new order',
-                  style: Theme.of(context).textTheme.headline2,
+                  style: GoogleFonts.poppins(
+                      textStyle: Theme.of(context).textTheme.headline2),
                 ),
                 Expanded(
                   child: Align(
