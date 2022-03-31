@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:dispenser_mobile_app/sidebar.dart';
 
 class Template extends StatefulWidget {
-  const Template({Key? key, required this.child, required this.title})
+  const Template({Key? key, required this.child, required this.title, this.isDrawer = false})
       : super(key: key);
   final Widget child;
   final String title;
+  final bool isDrawer;
 
   @override
   State<Template> createState() => _TemplateState();
@@ -31,13 +32,21 @@ class _TemplateState extends State<Template> {
             style: Theme.of(context).textTheme.headline1,
           ),
         ),
-        leading: Builder(
+        leading: widget.isDrawer ? Builder(
           builder: (context) => IconButton(
             icon: const Icon(
               Icons.menu_rounded,
               color: Colors.black,
             ),
             onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ) : Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            ),
+            onPressed: () => Navigator.pop(context),
           ),
         ),
         actions: <Widget>[
