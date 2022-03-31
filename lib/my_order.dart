@@ -3,7 +3,7 @@ import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
 
 class MyOrder extends StatefulWidget {
-  MyOrder({Key? key}) : super(key: key);
+  const MyOrder({Key? key}) : super(key: key);
 
   @override
   State<MyOrder> createState() => _MyOrderState();

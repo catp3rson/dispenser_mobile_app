@@ -52,7 +52,8 @@ class _TemplateState extends State<Template> {
         elevation: 0,
       ),
       drawer: const SideBar(),
-      body: widget.child,
+      body: Container(
+          margin: const EdgeInsets.only(bottom: 15.0), child: widget.child),
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Theme.of(context).backgroundColor,
         color: Theme.of(context).canvasColor,
