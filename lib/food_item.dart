@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -128,6 +129,8 @@ class AddMore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var length = 13;
+
     return InkWell(
       onTap: () {
         showModalBottomSheet<void>(
@@ -152,10 +155,14 @@ class AddMore extends StatelessWidget {
                     ),
                     const SizedBox(height: 15),
                     Expanded(
-                      child: GridView.count(
-                        childAspectRatio: 0.55,
-                        crossAxisCount: 3,
-                        children: List.filled(10, const AddItem()),
+                      child: SingleChildScrollView(
+                        child: LayoutGrid(
+                          columnSizes: [1.fr, 1.fr, 1.fr],
+                          rowSizes: List.filled((length / 3).ceil(), auto),
+                          columnGap: 10,
+                          rowGap: 10,
+                          children: List.filled(length, const AddItem()),
+                        ),
                       ),
                     ),
                   ],
