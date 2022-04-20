@@ -1,3 +1,4 @@
+import 'package:dispenser_mobile_app/fake_api.dart';
 import 'package:dispenser_mobile_app/new_order.dart';
 import 'package:dispenser_mobile_app/order_item.dart';
 import 'package:dispenser_mobile_app/template.dart';
@@ -12,41 +13,16 @@ class MyOrderPage extends StatefulWidget {
 }
 
 class _MyOrderPageState extends State<MyOrderPage> {
-  final initOrder = [
-    {
-      'name': 'My order 1',
-      'desc': 'Coke',
-    },
-    {
-      'name': 'My order 2',
-      'desc': 'Coke',
-    },
-    {
-      'name': 'My order 3',
-      'desc': 'Coke',
-    },
-    {
-      'name': 'My order 4',
-      'desc': 'Coke',
-    },
-    {
-      'name': 'My order 5',
-      'desc': 'Coke',
-    },
-    {
-      'name': 'My order 6',
-      'desc': 'Coke',
-    },
-    {
-      'name': 'My order 7',
-      'desc': 'Coke',
-    },
-    {
-      'name': 'My order 8',
-      'desc': 'Coke',
-    },
-  ];
+  List<Map<String, dynamic>> initOrder = [];
   List<Map<String, dynamic>> order = [];
+
+  void getData() async {
+    var temp = await getOrder();
+    setState(() {
+      initOrder = temp;
+      order = temp;
+    });
+  }
 
   void deleteOrder(int index) {
     setState(() {
@@ -57,7 +33,7 @@ class _MyOrderPageState extends State<MyOrderPage> {
   @override
   void initState() {
     super.initState();
-    order = [...initOrder];
+    getData();
   }
 
   @override

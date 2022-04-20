@@ -1,3 +1,4 @@
+import 'package:dispenser_mobile_app/fake_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
@@ -173,10 +174,10 @@ class AddMore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var length = 13;
-
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        var food = await getFoodShop();
+        var length = food.length;
         showModalBottomSheet<void>(
           context: context,
           builder: (BuildContext context) {
@@ -205,14 +206,16 @@ class AddMore extends StatelessWidget {
                           rowSizes: List.filled((length / 3).ceil(), auto),
                           columnGap: 10,
                           rowGap: 10,
-                          children: List.generate(
-                              length,
-                              (i) => AddItem(
-                                    name: 'Coke ' + (i + 69).toString(),
-                                    desc: 'Drinks',
+                          children: food
+                              .asMap()
+                              .entries
+                              .map((e) => AddItem(
+                                    name: e.value['name'],
+                                    desc: e.value['desc'],
                                     addAction: (p0, p1, p2) =>
                                         addAction(p0, p1, p2),
-                                  )),
+                                  ))
+                              .toList(),
                         ),
                       ),
                     ),

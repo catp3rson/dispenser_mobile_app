@@ -1,3 +1,4 @@
+import 'package:dispenser_mobile_app/fake_api.dart';
 import 'package:dispenser_mobile_app/food_item.dart';
 import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +15,14 @@ class MyOrder extends StatefulWidget {
 class _MyOrderState extends State<MyOrder> {
   bool changed = false;
   var tempName = '';
-  List<Map<String, dynamic>> item = List.generate(
-      15,
-      (i) => {
-            'name': 'Coke ' + i.toString(),
-            'desc': 'Drinks',
-            'quantity': i + 1,
-          });
+  List<Map<String, dynamic>> item = [];
+
+  void getData() async {
+    var temp = await getFoodOrder();
+    setState(() {
+      item = temp;
+    });
+  }
 
   void editItem(int index, int quantity) {
     if (quantity > 0) {
@@ -50,6 +52,7 @@ class _MyOrderState extends State<MyOrder> {
   @override
   void initState() {
     super.initState();
+    getData();
     tempName = widget.name;
   }
 
