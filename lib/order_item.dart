@@ -1,8 +1,46 @@
 import 'package:dispenser_mobile_app/my_order.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class OrderItem extends StatelessWidget {
-  const OrderItem({Key? key}) : super(key: key);
+  const OrderItem(
+      {Key? key, required this.name, required this.desc, required this.delete})
+      : super(key: key);
+  final String name;
+  final String desc;
+  final VoidCallback delete;
+
+  void _delete(BuildContext context) {
+    showCupertinoDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return CupertinoAlertDialog(
+            title: Text("Remove $name?"),
+            content: Text('Are you sure to remove $name?'),
+            actions: [
+              // The "Yes" button
+              CupertinoDialogAction(
+                onPressed: () {
+                  delete();
+                  Navigator.pop(context);
+                },
+                child: const Text('Yes'),
+                isDefaultAction: true,
+                isDestructiveAction: true,
+              ),
+              // The "No" button
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('No'),
+                isDefaultAction: false,
+                isDestructiveAction: false,
+              )
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +50,7 @@ class OrderItem extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MyOrder()),
+            MaterialPageRoute(builder: (context) => const MyOrder()),
           );
         },
         child: ClipRRect(
@@ -40,11 +78,11 @@ class OrderItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'My order 1',
+                          name,
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         Text(
-                          'Coke',
+                          desc,
                           style: Theme.of(context).textTheme.subtitle2,
                         ),
                       ],
@@ -59,7 +97,7 @@ class OrderItem extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MyOrder()),
+                                  builder: (context) => const MyOrder()),
                             );
                           }),
                     ),
@@ -69,7 +107,7 @@ class OrderItem extends StatelessWidget {
                       Icons.delete,
                       color: Colors.red,
                     ),
-                    onPressed: () {},
+                    onPressed: () => _delete(context),
                   ),
                 ],
               ),

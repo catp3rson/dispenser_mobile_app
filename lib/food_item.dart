@@ -4,7 +4,10 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FoodItem extends StatelessWidget {
-  const FoodItem({Key? key}) : super(key: key);
+  const FoodItem({Key? key, required this.name, required this.desc})
+      : super(key: key);
+  final String name;
+  final String desc;
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +56,11 @@ class FoodItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Coke',
+                            name,
                             style: Theme.of(context).textTheme.headline4,
                           ),
                           Text(
-                            'Drinks',
+                            desc,
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
                         ],

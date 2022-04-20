@@ -13,6 +13,15 @@ class MyOrder extends StatefulWidget {
 class _MyOrderState extends State<MyOrder> {
   @override
   Widget build(BuildContext context) {
+    List<Widget> children = List.filled(
+        15,
+        const FoodItem(
+          name: 'Coke',
+          desc: 'Drinks',
+        ),
+        growable: true);
+    children.add(const AddMore());
+
     return Template(
       child: Container(
         margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
@@ -34,15 +43,7 @@ class _MyOrderState extends State<MyOrder> {
             Expanded(
                 child: SingleChildScrollView(
                     child: Column(
-              children: const [
-                FoodItem(),
-                FoodItem(),
-                FoodItem(),
-                FoodItem(),
-                FoodItem(),
-                FoodItem(),
-                AddMore()
-              ],
+              children: children,
             ))),
           ],
         ),

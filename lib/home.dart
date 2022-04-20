@@ -12,11 +12,52 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TextEditingController editingController = TextEditingController();
+  final initOrder = [
+    {
+      'name': 'My order 1',
+      'desc': 'Coke',
+    },
+    {
+      'name': 'My order 2',
+      'desc': 'Coke',
+    },
+    {
+      'name': 'My order 3',
+      'desc': 'Coke',
+    },
+    {
+      'name': 'My order 4',
+      'desc': 'Coke',
+    },
+    {
+      'name': 'My order 5',
+      'desc': 'Coke',
+    },
+    {
+      'name': 'My order 6',
+      'desc': 'Coke',
+    },
+    {
+      'name': 'My order 7',
+      'desc': 'Coke',
+    },
+    {
+      'name': 'My order 8',
+      'desc': 'Coke',
+    },
+  ];
+  List<Map<String, dynamic>> order = [];
+
+  void deleteOrder(int index) {
+    setState(() {
+      order.removeAt(index);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    order = [...initOrder];
   }
 
   @override
@@ -40,6 +81,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: TextField(
+                onChanged: (value) {
+                  setState(() {
+                    if (value.isNotEmpty) {
+                      order.retainWhere((element) => element['name']
+                          .toLowerCase()
+                          .contains(value.toLowerCase()));
+                    } else {
+                      order = [...initOrder];
+                    }
+                  });
+                },
                 style: const TextStyle(
                   fontSize: 17,
                   color: Colors.black,
@@ -49,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontSize: 17,
                     color: Theme.of(context).hintColor,
                   ),
-                  hintText: 'Find your food',
+                  hintText: 'Find your order',
                   prefixIcon: Icon(
                     Icons.search,
                     color: Theme.of(context).hintColor,
@@ -94,19 +146,15 @@ class _MyHomePageState extends State<MyHomePage> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
-                  children: const [
-                    OrderItem(),
-                    OrderItem(),
-                    OrderItem(),
-                    OrderItem(),
-                    OrderItem(),
-                    OrderItem(),
-                    OrderItem(),
-                    OrderItem(),
-                    OrderItem(),
-                    OrderItem(),
-                    OrderItem(),
-                  ],
+                  children: order
+                      .asMap()
+                      .entries
+                      .map((e) => OrderItem(
+                            name: e.value['name'],
+                            desc: e.value['desc'],
+                            delete: () => deleteOrder(e.key),
+                          ))
+                      .toList(),
                 ),
               ),
             ),

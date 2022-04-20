@@ -13,7 +13,14 @@ class NewOrder extends StatefulWidget {
 class _NewOrderState extends State<NewOrder> {
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = List.filled(15, const FoodItem(), growable: true);
+    var textFocusNode = FocusNode();
+    List<Widget> children = List.filled(
+        15,
+        const FoodItem(
+          name: 'Coke',
+          desc: 'Drinks',
+        ),
+        growable: true);
     children.add(const AddMore());
 
     return Template(
@@ -25,10 +32,21 @@ class _NewOrderState extends State<NewOrder> {
           children: [
             Row(
               children: [
-                Text(
-                  'My new order',
-                  style: GoogleFonts.poppins(
-                      textStyle: Theme.of(context).textTheme.headline2),
+                SizedBox(
+                  width: 200,
+                  child: TextField(
+                    focusNode: textFocusNode,
+                    controller: TextEditingController(text: "Enter a name"),
+                    style: GoogleFonts.poppins(
+                        textStyle: Theme.of(context).textTheme.headline2),
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () => textFocusNode.requestFocus(),
+                        )),
+                    enabled: true,
+                  ),
                 ),
                 Expanded(
                   child: Align(

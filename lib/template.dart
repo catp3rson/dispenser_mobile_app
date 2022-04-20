@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:dispenser_mobile_app/sidebar.dart';
 
 class Template extends StatefulWidget {
-  const Template({Key? key, required this.child, required this.title, this.isDrawer = false})
+  const Template(
+      {Key? key,
+      required this.child,
+      required this.title,
+      this.isDrawer = false})
       : super(key: key);
   final Widget child;
   final String title;
@@ -32,23 +36,25 @@ class _TemplateState extends State<Template> {
             style: Theme.of(context).textTheme.headline1,
           ),
         ),
-        leading: widget.isDrawer ? Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(
-              Icons.menu_rounded,
-              color: Colors.black,
-            ),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-        ) : Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
+        leading: widget.isDrawer
+            ? Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(
+                    Icons.menu_rounded,
+                    color: Colors.black,
+                  ),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              )
+            : Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.black,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
         actions: <Widget>[
           IconButton(
             icon: Image.asset('images/avt.png'),
@@ -63,22 +69,6 @@ class _TemplateState extends State<Template> {
       drawer: const SideBar(),
       body: Container(
           margin: const EdgeInsets.only(bottom: 15.0), child: widget.child),
-      bottomNavigationBar: CurvedNavigationBar(
-        animationDuration: const Duration(milliseconds: 300),
-        backgroundColor: Theme.of(context).backgroundColor,
-        color: Theme.of(context).canvasColor,
-        buttonBackgroundColor: Theme.of(context).primaryColor,
-        items: const <Widget>[
-          Icon(Icons.home, size: 30),
-          Icon(Icons.search, size: 30),
-          Icon(Icons.shopify_sharp, size: 30),
-          Icon(Icons.assessment_outlined, size: 30),
-          Icon(Icons.account_circle_outlined, size: 30),
-        ],
-        onTap: (index) {
-          //Handle button tap
-        },
-      ),
     );
   }
 }
