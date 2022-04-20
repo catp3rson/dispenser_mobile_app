@@ -1,13 +1,53 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FoodItem extends StatelessWidget {
-  const FoodItem({Key? key, required this.name, required this.desc})
-      : super(key: key);
+  const FoodItem({
+    Key? key,
+    required this.name,
+    required this.desc,
+    required this.quantity,
+    required this.editQuantity,
+  }) : super(key: key);
   final String name;
   final String desc;
+  final int quantity;
+  final Function(int) editQuantity;
+
+  void _delete(BuildContext context) {
+    showCupertinoDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return CupertinoAlertDialog(
+            title: Text("Remove $name?"),
+            content: Text('Are you sure to remove $name?'),
+            actions: [
+              // The "Yes" button
+              CupertinoDialogAction(
+                onPressed: () {
+                  editQuantity(-1);
+                  Navigator.pop(context);
+                },
+                child: const Text('Yes'),
+                isDefaultAction: true,
+                isDestructiveAction: true,
+              ),
+              // The "No" button
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('No'),
+                isDefaultAction: false,
+                isDestructiveAction: false,
+              )
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +59,13 @@ class FoodItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.0),
           child: Slidable(
             key: const ValueKey(0),
-            endActionPane: const ActionPane(
-              motion: ScrollMotion(),
+            endActionPane: ActionPane(
+              motion: const ScrollMotion(),
               children: [
                 SlidableAction(
                   // An action can be bigger than the others.
                   flex: 2,
-                  onPressed: doNothing,
+                  onPressed: (_) => _delete(context),
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
                   icon: Icons.delete,
@@ -84,14 +124,14 @@ class FoodItem extends StatelessWidget {
                                   size: 15,
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () => editQuantity(quantity - 1),
                             ),
                           ),
                           SizedBox(
                             width: 40,
                             child: Center(
                               child: Text(
-                                '1',
+                                quantity.toString(),
                                 style: Theme.of(context).textTheme.headline4,
                               ),
                             ),
@@ -110,7 +150,7 @@ class FoodItem extends StatelessWidget {
                                   size: 15,
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () => editQuantity(quantity + 1),
                             ),
                           ),
                         ],
@@ -128,7 +168,8 @@ class FoodItem extends StatelessWidget {
 }
 
 class AddMore extends StatelessWidget {
-  const AddMore({Key? key}) : super(key: key);
+  const AddMore({Key? key, required this.addAction}) : super(key: key);
+  final Function(String, String, int) addAction;
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +184,7 @@ class AddMore extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.6,
               color: Theme.of(context).backgroundColor,
               child: Container(
-                margin: const EdgeInsets.all(20),
+                margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,7 +205,14 @@ class AddMore extends StatelessWidget {
                           rowSizes: List.filled((length / 3).ceil(), auto),
                           columnGap: 10,
                           rowGap: 10,
-                          children: List.filled(length, const AddItem()),
+                          children: List.generate(
+                              length,
+                              (i) => AddItem(
+                                    name: 'Coke ' + (i + 69).toString(),
+                                    desc: 'Drinks',
+                                    addAction: (p0, p1, p2) =>
+                                        addAction(p0, p1, p2),
+                                  )),
                         ),
                       ),
                     ),
@@ -213,7 +261,15 @@ class AddMore extends StatelessWidget {
 }
 
 class AddItem extends StatelessWidget {
-  const AddItem({Key? key}) : super(key: key);
+  const AddItem(
+      {Key? key,
+      required this.name,
+      required this.desc,
+      required this.addAction})
+      : super(key: key);
+  final String name;
+  final String desc;
+  final Function(String, String, int) addAction;
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +300,7 @@ class AddItem extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Coca Cola',
+                    name,
                     style: GoogleFonts.poppins(
                         textStyle: Theme.of(context).textTheme.headline4),
                   ),
@@ -255,7 +311,7 @@ class AddItem extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Drinks',
+                    desc,
                     style: GoogleFonts.poppins(
                         textStyle: Theme.of(context).textTheme.subtitle2),
                   ),
@@ -285,6 +341,7 @@ class AddItem extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15.0)),
                       ),
                       onPressed: () {
+                        addAction(name, desc, 1);
                         Navigator.pop(context);
                       }),
                 ),
@@ -296,5 +353,3 @@ class AddItem extends StatelessWidget {
     );
   }
 }
-
-void doNothing(BuildContext context) {}

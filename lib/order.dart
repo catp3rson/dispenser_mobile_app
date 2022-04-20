@@ -4,14 +4,14 @@ import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class MyOrderPage extends StatefulWidget {
+  const MyOrderPage({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyOrderPage> createState() => _MyOrderPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyOrderPageState extends State<MyOrderPage> {
   final initOrder = [
     {
       'name': 'My order 1',
@@ -161,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      title: 'Home',
+      title: 'Order',
       isDrawer: true,
     );
   }

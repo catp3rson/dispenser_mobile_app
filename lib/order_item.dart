@@ -50,7 +50,7 @@ class OrderItem extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const MyOrder()),
+            MaterialPageRoute(builder: (context) => MyOrder(name: name)),
           );
         },
         child: ClipRRect(
@@ -97,7 +97,7 @@ class OrderItem extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const MyOrder()),
+                                  builder: (context) => MyOrder(name: name)),
                             );
                           }),
                     ),

@@ -1,17 +1,20 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dispenser_mobile_app/sidebar.dart';
 
 class Template extends StatefulWidget {
-  const Template(
-      {Key? key,
-      required this.child,
-      required this.title,
-      this.isDrawer = false})
-      : super(key: key);
+  const Template({
+    Key? key,
+    required this.child,
+    required this.title,
+    this.isDrawer = false,
+    this.warning = false,
+  }) : super(key: key);
   final Widget child;
   final String title;
   final bool isDrawer;
+  final bool warning;
 
   @override
   State<Template> createState() => _TemplateState();
@@ -19,6 +22,39 @@ class Template extends StatefulWidget {
 
 class _TemplateState extends State<Template> {
   TextEditingController editingController = TextEditingController();
+
+  void _alertCancel(BuildContext context, VoidCallback pop) {
+    showCupertinoDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return CupertinoAlertDialog(
+            title: const Text("Warning!"),
+            content:
+                const Text('If you go back, you will lose all your changes.'),
+            actions: [
+              // The "Yes" button
+              CupertinoDialogAction(
+                onPressed: () {
+                  pop();
+                  Navigator.pop(context);
+                },
+                child: const Text('Yes'),
+                isDefaultAction: true,
+                isDestructiveAction: true,
+              ),
+              // The "No" button
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('No'),
+                isDefaultAction: false,
+                isDestructiveAction: false,
+              )
+            ],
+          );
+        });
+  }
 
   @override
   void initState() {
@@ -52,7 +88,10 @@ class _TemplateState extends State<Template> {
                     Icons.arrow_back_ios,
                     color: Colors.black,
                   ),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: widget.warning
+                      ? () =>
+                          _alertCancel(context, () => Navigator.pop(context))
+                      : () => Navigator.pop(context),
                 ),
               ),
         actions: <Widget>[
@@ -69,6 +108,7 @@ class _TemplateState extends State<Template> {
       drawer: const SideBar(),
       body: Container(
           margin: const EdgeInsets.only(bottom: 15.0), child: widget.child),
+      drawerEnableOpenDragGesture: false,
     );
   }
 }

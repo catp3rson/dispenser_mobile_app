@@ -11,19 +11,52 @@ class NewOrder extends StatefulWidget {
 }
 
 class _NewOrderState extends State<NewOrder> {
+  List<Map<String, dynamic>> item = [];
+
+  void editItem(int index, int quantity) {
+    if (quantity > 0) {
+      setState(() {
+        item[index]['quantity'] = quantity;
+      });
+    } else if (quantity == -1) {
+      setState(() {
+        item.removeAt(index);
+      });
+    }
+  }
+
+  void addItem(String name, String desc, int quantity) {
+    setState(() {
+      item.add({
+        'name': name,
+        'desc': desc,
+        'quantity': quantity,
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var textFocusNode = FocusNode();
-    List<Widget> children = List.filled(
-        15,
-        const FoodItem(
-          name: 'Coke',
-          desc: 'Drinks',
-        ),
-        growable: true);
-    children.add(const AddMore());
+    List<Widget> children = [
+      ...item
+          .asMap()
+          .entries
+          .map((e) => FoodItem(
+                key: Key(e.key.toString()),
+                name: e.value['name'],
+                desc: e.value['desc'],
+                quantity: e.value['quantity'],
+                editQuantity: (quantity) => editItem(e.key, quantity),
+              ))
+          .toList()
+    ];
+    children.add(AddMore(
+      addAction: (p0, p1, p2) => addItem(p0, p1, p2),
+    ));
 
     return Template(
+      warning: item.isNotEmpty,
       child: Container(
         margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
         child: Column(
@@ -42,7 +75,7 @@ class _NewOrderState extends State<NewOrder> {
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         suffixIcon: IconButton(
-                          icon: const Icon(Icons.edit),
+                          icon: const Icon(Icons.edit, color: Colors.black),
                           onPressed: () => textFocusNode.requestFocus(),
                         )),
                     enabled: true,
@@ -52,27 +85,32 @@ class _NewOrderState extends State<NewOrder> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                        child: Text(
-                          'DONE',
-                          style: GoogleFonts.poppins(
-                              textStyle: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.2,
-                          )),
-                        ),
-                        style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          padding: const EdgeInsets.all(5),
-                          minimumSize: const Size(50, 25),
-                          alignment: Alignment.center,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0)),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        }),
+                      child: Text(
+                        'DONE',
+                        style: GoogleFonts.poppins(
+                            textStyle: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.2,
+                        )),
+                      ),
+                      style: TextButton.styleFrom(
+                        backgroundColor: item.isNotEmpty
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey,
+                        padding: const EdgeInsets.all(5),
+                        minimumSize: const Size(50, 25),
+                        alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)),
+                      ),
+                      onPressed: item.isNotEmpty
+                          ? () {
+                              Navigator.pop(context);
+                            }
+                          : () {},
+                    ),
                   ),
                 ),
               ],
