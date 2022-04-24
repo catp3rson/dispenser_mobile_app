@@ -170,7 +170,7 @@ class FoodItem extends StatelessWidget {
 
 class AddMore extends StatelessWidget {
   const AddMore({Key? key, required this.addAction}) : super(key: key);
-  final Function(String, String, int) addAction;
+  final Function(String, String, String, int) addAction;
 
   @override
   Widget build(BuildContext context) {
@@ -210,10 +210,11 @@ class AddMore extends StatelessWidget {
                               .asMap()
                               .entries
                               .map((e) => AddItem(
+                                    uuid: e.value['uuid'],
                                     name: e.value['name'],
                                     desc: e.value['desc'],
-                                    addAction: (p0, p1, p2) =>
-                                        addAction(p0, p1, p2),
+                                    addAction: (p0, p1, p2, p3) =>
+                                        addAction(p0, p1, p2, p3),
                                   ))
                               .toList(),
                         ),
@@ -266,13 +267,15 @@ class AddMore extends StatelessWidget {
 class AddItem extends StatelessWidget {
   const AddItem(
       {Key? key,
+      required this.uuid,
       required this.name,
       required this.desc,
       required this.addAction})
       : super(key: key);
+  final String uuid;
   final String name;
   final String desc;
-  final Function(String, String, int) addAction;
+  final Function(String, String, String, int) addAction;
 
   @override
   Widget build(BuildContext context) {
@@ -344,7 +347,7 @@ class AddItem extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15.0)),
                       ),
                       onPressed: () {
-                        addAction(name, desc, 1);
+                        addAction(uuid, name, desc, 1);
                         Navigator.pop(context);
                       }),
                 ),

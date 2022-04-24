@@ -5,22 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyOrder extends StatefulWidget {
-  const MyOrder({Key? key, required this.name}) : super(key: key);
-  final String name;
+  const MyOrder({Key? key}) : super(key: key);
 
   @override
   State<MyOrder> createState() => _MyOrderState();
 }
 
 class _MyOrderState extends State<MyOrder> {
+  String name = '';
   bool changed = false;
   var tempName = '';
   List<Map<String, dynamic>> item = [];
 
   void getData() async {
-    var temp = await getFoodOrder();
+    var request = await getOrderDetail();
     setState(() {
-      item = temp;
+      item = [...request['item']];
+      name = request['name'];
+      tempName = request['name'];
     });
   }
 
@@ -38,9 +40,10 @@ class _MyOrderState extends State<MyOrder> {
     }
   }
 
-  void addItem(String name, String desc, int quantity) {
+  void addItem(String uuid, String name, String desc, int quantity) {
     setState(() {
       item.add({
+        'uuid': uuid,
         'name': name,
         'desc': desc,
         'quantity': quantity,
@@ -53,7 +56,6 @@ class _MyOrderState extends State<MyOrder> {
   void initState() {
     super.initState();
     getData();
-    tempName = widget.name;
   }
 
   @override
@@ -73,7 +75,7 @@ class _MyOrderState extends State<MyOrder> {
           .toList()
     ];
     children.add(AddMore(
-      addAction: (p0, p1, p2) => addItem(p0, p1, p2),
+      addAction: (p0, p1, p2, p3) => addItem(p0, p1, p2, p3),
     ));
 
     return Template(
@@ -97,7 +99,7 @@ class _MyOrderState extends State<MyOrder> {
                     focusNode: textFocusNode,
                     controller: TextEditingController(text: tempName),
                     onSubmitted: (value) {
-                      if (value != widget.name && !changed) {
+                      if (value != name && !changed) {
                         setState(() {
                           changed = true;
                           tempName = value;
@@ -140,13 +142,13 @@ class _MyOrderState extends State<MyOrder> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0)),
                       ),
-                      onPressed: changed
-                          ? () {
-                              setState(() {
-                                changed = false;
-                              });
-                            }
-                          : () {},
+                      onPressed: () {
+                        if (changed) {
+                          setState(() {
+                            changed = false;
+                          });
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -161,7 +163,7 @@ class _MyOrderState extends State<MyOrder> {
           ],
         ),
       ),
-      title: widget.name,
+      title: name,
     );
   }
 }

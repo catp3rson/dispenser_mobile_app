@@ -4,9 +4,14 @@ import 'package:flutter/cupertino.dart';
 
 class OrderItem extends StatelessWidget {
   const OrderItem(
-      {Key? key, required this.name, required this.desc, required this.delete})
+      {Key? key,
+      required this.uuid,
+      required this.name,
+      required this.desc,
+      required this.delete})
       : super(key: key);
   final String name;
+  final String uuid;
   final String desc;
   final VoidCallback delete;
 
@@ -48,9 +53,10 @@ class OrderItem extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10.0),
       child: InkWell(
         onTap: () {
-          Navigator.push(
+          Navigator.pushNamed(
             context,
-            MaterialPageRoute(builder: (context) => MyOrder(name: name)),
+            '/order',
+            arguments: {'uuid': uuid},
           );
         },
         child: ClipRRect(
@@ -94,11 +100,8 @@ class OrderItem extends StatelessWidget {
                       child: IconButton(
                           icon: const Icon(Icons.remove_red_eye_sharp),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MyOrder(name: name)),
-                            );
+                            Navigator.pushNamed(context, '/order',
+                                arguments: {'uuid': uuid});
                           }),
                     ),
                   ),

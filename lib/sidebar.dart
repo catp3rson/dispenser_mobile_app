@@ -92,7 +92,8 @@ class SideBar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(24.0),
                     ),
                   ),
-                  onPressed: () => {Navigator.pop(context)},
+                  onPressed: () =>
+                      Navigator.of(context).pushReplacementNamed('/login'),
                   icon: const Icon(
                     Icons.logout_rounded,
                     color: Colors.white,

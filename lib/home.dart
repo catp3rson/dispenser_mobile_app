@@ -1,18 +1,17 @@
 import 'package:dispenser_mobile_app/fake_api.dart';
-import 'package:dispenser_mobile_app/new_order.dart';
 import 'package:dispenser_mobile_app/order_item.dart';
 import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MyOrderPage extends StatefulWidget {
-  const MyOrderPage({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
-  State<MyOrderPage> createState() => _MyOrderPageState();
+  State<Home> createState() => _HomeState();
 }
 
-class _MyOrderPageState extends State<MyOrderPage> {
+class _HomeState extends State<Home> {
   List<Map<String, dynamic>> initOrder = [];
   List<Map<String, dynamic>> order = [];
 
@@ -58,13 +57,12 @@ class _MyOrderPageState extends State<MyOrderPage> {
               ),
               child: TextField(
                 onChanged: (value) {
+                  order = [...initOrder];
                   setState(() {
                     if (value.isNotEmpty) {
                       order.retainWhere((element) => element['name']
                           .toLowerCase()
                           .contains(value.toLowerCase()));
-                    } else {
-                      order = [...initOrder];
                     }
                   });
                 },
@@ -100,10 +98,9 @@ class _MyOrderPageState extends State<MyOrderPage> {
                     alignment: Alignment.bottomRight,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushNamed(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => const NewOrder()),
+                          '/new_order',
                         );
                       },
                       child: Text(
@@ -126,6 +123,7 @@ class _MyOrderPageState extends State<MyOrderPage> {
                       .asMap()
                       .entries
                       .map((e) => OrderItem(
+                            uuid: e.value['uuid'],
                             name: e.value['name'],
                             desc: e.value['desc'],
                             delete: () => deleteOrder(e.key),
@@ -137,7 +135,7 @@ class _MyOrderPageState extends State<MyOrderPage> {
           ],
         ),
       ),
-      title: 'Order',
+      title: 'Home',
       isDrawer: true,
     );
   }

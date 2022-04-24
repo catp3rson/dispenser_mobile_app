@@ -25,9 +25,10 @@ class _NewOrderState extends State<NewOrder> {
     }
   }
 
-  void addItem(String name, String desc, int quantity) {
+  void addItem(String uuid, String name, String desc, int quantity) {
     setState(() {
       item.add({
+        'uuid': uuid,
         'name': name,
         'desc': desc,
         'quantity': quantity,
@@ -52,7 +53,7 @@ class _NewOrderState extends State<NewOrder> {
           .toList()
     ];
     children.add(AddMore(
-      addAction: (p0, p1, p2) => addItem(p0, p1, p2),
+      addAction: (p0, p1, p2, p3) => addItem(p0, p1, p2, p3),
     ));
 
     return Template(
@@ -124,7 +125,7 @@ class _NewOrderState extends State<NewOrder> {
           ],
         ),
       ),
-      title: 'My Order',
+      title: 'Create New Order',
     );
   }
 }
