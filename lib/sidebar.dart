@@ -68,12 +68,12 @@ class SideBar extends StatelessWidget {
                   ),
                 ),
                 item('My Profile', Icons.account_circle_outlined, () {
-                  Navigator.pop(context);
-                }),
-                item('Statistics', Icons.add_chart_sharp, () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(context, '/profile');
                 }),
                 item('Order', Icons.assignment_outlined, () {
+                  Navigator.pushReplacementNamed(context, '/');
+                }),
+                item('History', Icons.history_edu_outlined, () {
                   Navigator.pop(context);
                 }),
                 item('Settings', Icons.settings_outlined, () {

@@ -1,6 +1,7 @@
 import 'package:dispenser_mobile_app/my_order.dart';
 import 'package:dispenser_mobile_app/new_order.dart';
 import 'package:dispenser_mobile_app/home.dart';
+import 'package:dispenser_mobile_app/profile.dart';
 import 'package:dispenser_mobile_app/signin.dart';
 import 'package:dispenser_mobile_app/theme.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const Home(),
         '/order': (context) => const MyOrder(),
         '/new_order': (context) => const NewOrder(),
+        '/profile': (context) => const ProfilePage(),
       },
     );
   }

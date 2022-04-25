@@ -163,7 +163,7 @@ class _MyOrderState extends State<MyOrder> {
           ],
         ),
       ),
-      title: name,
+      title: 'My order',
     );
   }
 }

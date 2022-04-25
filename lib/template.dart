@@ -10,11 +10,13 @@ class Template extends StatefulWidget {
     required this.title,
     this.isDrawer = false,
     this.warning = false,
+    this.profile = true,
   }) : super(key: key);
   final Widget child;
   final String title;
   final bool isDrawer;
   final bool warning;
+  final bool profile;
 
   @override
   State<Template> createState() => _TemplateState();
@@ -97,9 +99,11 @@ class _TemplateState extends State<Template> {
         actions: <Widget>[
           IconButton(
             icon: Image.asset('images/avt.png'),
-            onPressed: () {
-              // TODO: open profile page
-            },
+            onPressed: widget.profile
+                ? () {
+                    Navigator.pushReplacementNamed(context, '/profile');
+                  }
+                : () {},
           )
         ],
         backgroundColor: Theme.of(context).backgroundColor,

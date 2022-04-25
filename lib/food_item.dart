@@ -58,25 +58,37 @@ class FoodItem extends StatelessWidget {
         onTap: () {},
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15.0),
-          child: Slidable(
-            key: const ValueKey(0),
-            endActionPane: ActionPane(
-              motion: const ScrollMotion(),
-              children: [
-                SlidableAction(
-                  // An action can be bigger than the others.
-                  flex: 2,
-                  onPressed: (_) => _delete(context),
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  icon: Icons.delete,
-                  label: 'Delete',
-                ),
+          child: Container(
+            height: 70,
+            margin: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              color: Theme.of(context).canvasColor,
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  offset: const Offset(2, 2),
+                  blurRadius: 1.0,
+                  spreadRadius: 0.0,
+                )
               ],
             ),
-            child: Container(
-              height: 70,
-              color: Theme.of(context).canvasColor,
+            child: Slidable(
+              key: const ValueKey(0),
+              endActionPane: ActionPane(
+                motion: const ScrollMotion(),
+                children: [
+                  SlidableAction(
+                    // An action can be bigger than the others.
+                    flex: 2,
+                    onPressed: (_) => _delete(context),
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    icon: Icons.delete,
+                    label: 'Delete',
+                  ),
+                ],
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
@@ -227,36 +239,45 @@ class AddMore extends StatelessWidget {
           },
         );
       },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15.0),
-        child: Container(
-          height: 70,
+      child: Container(
+        height: 70,
+        margin: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
           color: const Color(0xffffc7b7),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Container(
-                      height: 50,
-                      width: 50,
-                      color: Colors.white,
-                      child: Icon(Icons.add,
-                          size: 40, color: Theme.of(context).primaryColor)),
-                ),
-                const SizedBox(width: 10),
-                const Text(
-                  'Add more',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              offset: const Offset(2, 2),
+              blurRadius: 1.0,
+              spreadRadius: 0.0,
+            )
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Container(
+                    height: 50,
+                    width: 50,
                     color: Colors.white,
-                    letterSpacing: 1.63813,
-                  ),
+                    child: Icon(Icons.add,
+                        size: 40, color: Theme.of(context).primaryColor)),
+              ),
+              const SizedBox(width: 10),
+              const Text(
+                'Add more',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                  letterSpacing: 1.63813,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -280,80 +301,89 @@ class AddItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(5.0),
+      margin: const EdgeInsets.all(4.0),
       height: 200,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15.0),
-        child: Container(
+      child: Container(
+        margin: const EdgeInsets.all(1),
+        decoration: BoxDecoration(
           color: Theme.of(context).canvasColor,
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
-                child: FractionallySizedBox(
-                  widthFactor: 1,
-                  child: Image.asset(
-                    'images/coke.png',
-                    fit: BoxFit.fill,
-                  ),
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              offset: const Offset(1, 1),
+              blurRadius: 1.0,
+              spreadRadius: 0.0,
+            )
+          ],
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: FractionallySizedBox(
+                widthFactor: 1,
+                child: Image.asset(
+                  'images/coke.png',
+                  fit: BoxFit.fill,
                 ),
               ),
-              const SizedBox(
-                height: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    name,
-                    style: GoogleFonts.poppins(
-                        textStyle: Theme.of(context).textTheme.headline4),
-                  ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  name,
+                  style: GoogleFonts.poppins(
+                      textStyle: Theme.of(context).textTheme.headline4),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    desc,
-                    style: GoogleFonts.poppins(
-                        textStyle: Theme.of(context).textTheme.subtitle2),
-                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  desc,
+                  style: GoogleFonts.poppins(
+                      textStyle: Theme.of(context).textTheme.subtitle2),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                      child: Text(
-                        'Add',
-                        style: GoogleFonts.poppins(
-                            textStyle: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.2,
-                        )),
-                      ),
-                      style: TextButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        padding: EdgeInsets.zero,
-                        minimumSize: const Size(50, 25),
-                        alignment: Alignment.center,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0)),
-                      ),
-                      onPressed: () {
-                        addAction(uuid, name, desc, 1);
-                        Navigator.pop(context);
-                      }),
-                ),
-              )
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                    child: Text(
+                      'Add',
+                      style: GoogleFonts.poppins(
+                          textStyle: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.2,
+                      )),
+                    ),
+                    style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(50, 25),
+                      alignment: Alignment.center,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0)),
+                    ),
+                    onPressed: () {
+                      addAction(uuid, name, desc, 1);
+                      Navigator.pop(context);
+                    }),
+              ),
+            )
+          ],
         ),
       ),
     );
