@@ -1,4 +1,4 @@
-import 'package:dispenser_mobile_app/fake_api.dart';
+import 'package:dispenser_mobile_app/API.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
@@ -9,11 +9,13 @@ class FoodItem extends StatelessWidget {
   const FoodItem({
     Key? key,
     required this.name,
+    required this.image,
     required this.desc,
     required this.quantity,
     required this.editQuantity,
   }) : super(key: key);
   final String name;
+  final String image;
   final String desc;
   final int quantity;
   final Function(int) editQuantity;
@@ -95,8 +97,8 @@ class FoodItem extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Image.asset(
-                        'images/coke.png',
+                      child: Image.network(
+                        baseURL + image,
                         height: 50,
                         width: 50,
                         fit: BoxFit.fill,
@@ -181,14 +183,28 @@ class FoodItem extends StatelessWidget {
 }
 
 class AddMore extends StatelessWidget {
-  const AddMore({Key? key, required this.addAction}) : super(key: key);
+  const AddMore({Key? key, required this.token, required this.addAction})
+      : super(key: key);
+  final String token;
   final Function(String, String, String, int) addAction;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        var food = await getFoodShop();
+        var food = await request(
+                RequestType.getRequest, apiURL + '/product/all', token)
+            .then((value) => value.data as List);
+        List<Widget> children = food
+            .map((e) => AddItem(
+                  uuid: e['uuid'],
+                  image: e['image'],
+                  name: e['name'],
+                  desc: '${e['price'].toString()}  Credits',
+                  addAction: (p0, p1, p2, p3) => addAction(p0, p1, p2, p3),
+                ))
+            .toList();
+        print(children);
         var length = food.length;
         showModalBottomSheet<void>(
           context: context,
@@ -218,17 +234,7 @@ class AddMore extends StatelessWidget {
                           rowSizes: List.filled((length / 3).ceil(), auto),
                           columnGap: 10,
                           rowGap: 10,
-                          children: food
-                              .asMap()
-                              .entries
-                              .map((e) => AddItem(
-                                    uuid: e.value['uuid'],
-                                    name: e.value['name'],
-                                    desc: e.value['desc'],
-                                    addAction: (p0, p1, p2, p3) =>
-                                        addAction(p0, p1, p2, p3),
-                                  ))
-                              .toList(),
+                          children: children,
                         ),
                       ),
                     ),
@@ -289,11 +295,13 @@ class AddItem extends StatelessWidget {
   const AddItem(
       {Key? key,
       required this.uuid,
+      required this.image,
       required this.name,
       required this.desc,
       required this.addAction})
       : super(key: key);
   final String uuid;
+  final String image;
   final String name;
   final String desc;
   final Function(String, String, String, int) addAction;
@@ -302,7 +310,6 @@ class AddItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(4.0),
-      height: 200,
       child: Container(
         margin: const EdgeInsets.all(1),
         decoration: BoxDecoration(
@@ -323,9 +330,13 @@ class AddItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
               child: FractionallySizedBox(
                 widthFactor: 1,
-                child: Image.asset(
-                  'images/coke.png',
-                  fit: BoxFit.fill,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Image.network(
+                    baseURL + image,
+                    height: 70,
+                    fit: BoxFit.fitHeight,
+                  ),
                 ),
               ),
             ),
@@ -354,33 +365,35 @@ class AddItem extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton(
-                    child: Text(
-                      'Add',
-                      style: GoogleFonts.poppins(
-                          textStyle: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.2,
-                      )),
-                    ),
-                    style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      padding: EdgeInsets.zero,
-                      minimumSize: const Size(50, 25),
-                      alignment: Alignment.center,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0)),
-                    ),
-                    onPressed: () {
-                      addAction(uuid, name, desc, 1);
-                      Navigator.pop(context);
-                    }),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: TextButton(
+                      child: Text(
+                        'Add',
+                        style: GoogleFonts.poppins(
+                            textStyle: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.2,
+                        )),
+                      ),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(50, 25),
+                        alignment: Alignment.center,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)),
+                      ),
+                      onPressed: () {
+                        addAction(uuid, name, desc, 1);
+                        Navigator.pop(context);
+                      }),
+                ),
               ),
             )
           ],

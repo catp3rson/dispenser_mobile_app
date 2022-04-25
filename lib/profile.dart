@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({Key? key, required this.user}) : super(key: key);
+  final Map<String, dynamic> user;
 
   List<Widget> item(BuildContext context, String label, String value) {
     return [
@@ -28,6 +29,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Template(
+      user: user,
       title: 'Profile',
       profile: false,
       child: Column(
@@ -57,14 +59,14 @@ class ProfilePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Welcome User!',
+                          user['first_name'] + ' ' + user['last_name'],
                           style: GoogleFonts.poppins(
                                   textStyle:
                                       Theme.of(context).textTheme.headline2)
                               .copyWith(color: Colors.white),
                         ),
                         Text(
-                          'Staff ID: 5128654',
+                          'Credits: ' + user['credit'].toString(),
                           style: GoogleFonts.poppins(
                                   textStyle:
                                       Theme.of(context).textTheme.subtitle1)
@@ -81,9 +83,10 @@ class ProfilePage extends StatelessWidget {
             margin: const EdgeInsets.fromLTRB(35.0, 20.0, 35.0, 0.0),
             child: Column(
               children: [
-                ...item(context, 'Name', 'John Doe'),
-                ...item(context, 'Email', 'johndoe@email.com'),
-                ...item(context, 'Phone', '08911298765'),
+                ...item(context, 'Name',
+                    user['first_name'] + ' ' + user['last_name']),
+                ...item(context, 'Email', user['email']),
+                ...item(context, 'Phone', user['phone']),
                 ...item(context, 'Password', '••••••••••••'),
               ],
             ),

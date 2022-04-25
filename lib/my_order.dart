@@ -1,11 +1,14 @@
-import 'package:dispenser_mobile_app/fake_api.dart';
+import 'package:dispenser_mobile_app/API.dart';
 import 'package:dispenser_mobile_app/food_item.dart';
 import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyOrder extends StatefulWidget {
-  const MyOrder({Key? key}) : super(key: key);
+  const MyOrder({Key? key, required this.user, required this.token})
+      : super(key: key);
+  final Map<String, dynamic> user;
+  final String token;
 
   @override
   State<MyOrder> createState() => _MyOrderState();
@@ -18,12 +21,14 @@ class _MyOrderState extends State<MyOrder> {
   List<Map<String, dynamic>> item = [];
 
   void getData() async {
-    var request = await getOrderDetail();
-    setState(() {
-      item = [...request['item']];
-      name = request['name'];
-      tempName = request['name'];
-    });
+    final arg = ModalRoute.of(context)!.settings.arguments as UUIDArgument;
+    request(RequestType.getRequest,
+            apiURL + '/order/view_order?uuid=${arg.uuid}', widget.token)
+        .then((value) => setState(() {
+              item = [...value.data['order_item_set']];
+              name = value.data['name'];
+              tempName = value.data['name'];
+            }));
   }
 
   void editItem(int index, int quantity) {
@@ -32,7 +37,7 @@ class _MyOrderState extends State<MyOrder> {
         item[index]['quantity'] = quantity;
         changed = true;
       });
-    } else if (quantity == -1) {
+    } else if (quantity < 1) {
       setState(() {
         item.removeAt(index);
         changed = true;
@@ -55,11 +60,13 @@ class _MyOrderState extends State<MyOrder> {
   @override
   void initState() {
     super.initState();
-    getData();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (item.isEmpty) {
+      getData();
+    }
     var textFocusNode = FocusNode();
     List<Widget> children = [
       ...item
@@ -67,18 +74,21 @@ class _MyOrderState extends State<MyOrder> {
           .entries
           .map((e) => FoodItem(
                 key: Key(e.key.toString()),
-                name: e.value['name'],
-                desc: e.value['desc'],
+                name: e.value['item']['name'],
+                image: e.value['item']['image'],
+                desc: 'Price: ${e.value['item']['price'].toString()} Credits',
                 quantity: e.value['quantity'],
                 editQuantity: (quantity) => editItem(e.key, quantity),
               ))
           .toList()
     ];
     children.add(AddMore(
+      token: widget.token,
       addAction: (p0, p1, p2, p3) => addItem(p0, p1, p2, p3),
     ));
 
     return Template(
+      user: widget.user,
       warning: changed,
       child: Container(
         margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),

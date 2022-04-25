@@ -6,12 +6,14 @@ import 'package:dispenser_mobile_app/sidebar.dart';
 class Template extends StatefulWidget {
   const Template({
     Key? key,
+    required this.user,
     required this.child,
     required this.title,
     this.isDrawer = false,
     this.warning = false,
     this.profile = true,
   }) : super(key: key);
+  final Map<String, dynamic> user;
   final Widget child;
   final String title;
   final bool isDrawer;
@@ -109,7 +111,9 @@ class _TemplateState extends State<Template> {
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0,
       ),
-      drawer: const SideBar(),
+      drawer: SideBar(
+        user: widget.user,
+      ),
       body: widget.child,
       drawerEnableOpenDragGesture: false,
     );

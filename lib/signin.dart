@@ -1,14 +1,41 @@
+import 'package:dio/dio.dart';
+import 'package:dispenser_mobile_app/API.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key, required this.setAuth, required this.setUser})
+      : super(key: key);
+  final Function(String) setAuth;
+  final Function(Map<String, dynamic>) setUser;
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  var token = '';
   Duration get loginTime => const Duration(milliseconds: 200);
 
   Future<String?> _authUser(LoginData data) {
-    return Future.delayed(loginTime).then((_) {
-      return null;
-    });
+    var dio = Dio();
+    var url = apiURL + '/account/signin';
+    return dio.post(url, data: {
+      "email": "hig@emovaw.za",
+      "password": "hig@emovaw.za"
+    }).then((response) async {
+      if (response.statusCode == 200) {
+        setState(() {
+          token = response.data['access_token'];
+        });
+        widget.setAuth(response.data['access_token']);
+        await request(RequestType.getRequest, apiURL + '/account/about', token)
+            .then((value) => widget.setUser(value.data));
+        return null;
+      } else {
+        return '${response.statusCode}: ${response.statusMessage}';
+      }
+    }).catchError((e) => e);
   }
 
   String? _validateUser(String? user) {

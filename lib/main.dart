@@ -10,8 +10,28 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var auth = '';
+  Map<String, dynamic> user = {};
+
+  void setAuth(String a) {
+    setState(() {
+      auth = a;
+    });
+  }
+
+  void setUser(Map<String, dynamic> u) {
+    setState(() {
+      user = {...u};
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +40,25 @@ class MyApp extends StatelessWidget {
       theme: themeApp,
       initialRoute: '/login',
       routes: {
-        '/login': (context) => const LoginScreen(),
-        '/': (context) => const Home(),
-        '/order': (context) => const MyOrder(),
-        '/new_order': (context) => const NewOrder(),
-        '/profile': (context) => const ProfilePage(),
+        '/login': (context) => LoginScreen(
+              setAuth: setAuth,
+              setUser: setUser,
+            ),
+        '/': (context) => Home(
+              token: auth,
+              user: user,
+            ),
+        '/order': (context) => MyOrder(
+              token: auth,
+              user: user,
+            ),
+        '/new_order': (context) => NewOrder(
+              token: auth,
+              user: user,
+            ),
+        '/profile': (context) => ProfilePage(
+              user: user,
+            ),
       },
     );
   }

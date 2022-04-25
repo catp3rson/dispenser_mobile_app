@@ -1,3 +1,4 @@
+import 'package:dispenser_mobile_app/API.dart';
 import 'package:dispenser_mobile_app/my_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,11 +7,13 @@ class OrderItem extends StatelessWidget {
   const OrderItem(
       {Key? key,
       required this.uuid,
+      required this.image,
       required this.name,
       required this.desc,
       required this.delete})
       : super(key: key);
   final String name;
+  final String image;
   final String uuid;
   final String desc;
   final VoidCallback delete;
@@ -56,7 +59,7 @@ class OrderItem extends StatelessWidget {
           Navigator.pushNamed(
             context,
             '/order',
-            arguments: {'uuid': uuid},
+            arguments: UUIDArgument(uuid),
           );
         },
         child: Container(
@@ -80,8 +83,8 @@ class OrderItem extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
-                  child: Image.asset(
-                    'images/coke.png',
+                  child: Image.network(
+                    baseURL + image,
                     height: 50,
                     width: 50,
                     fit: BoxFit.fill,
@@ -110,8 +113,11 @@ class OrderItem extends StatelessWidget {
                     child: IconButton(
                         icon: const Icon(Icons.remove_red_eye_sharp),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/order',
-                              arguments: {'uuid': uuid});
+                          Navigator.pushNamed(
+                            context,
+                            '/order',
+                            arguments: UUIDArgument(uuid),
+                          );
                         }),
                   ),
                 ),

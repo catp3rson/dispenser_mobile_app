@@ -1,11 +1,15 @@
-import 'package:dispenser_mobile_app/fake_api.dart';
+import 'package:dio/dio.dart';
+import 'package:dispenser_mobile_app/API.dart';
 import 'package:dispenser_mobile_app/order_item.dart';
 import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({Key? key, required this.token, required this.user})
+      : super(key: key);
+  final String token;
+  final Map<String, dynamic> user;
 
   @override
   State<Home> createState() => _HomeState();
@@ -16,17 +20,29 @@ class _HomeState extends State<Home> {
   List<Map<String, dynamic>> order = [];
 
   void getData() async {
-    var temp = await getOrder();
+    var response = await request(
+            RequestType.getRequest, apiURL + '/order/my_orders', widget.token)
+        .then((value) {
+      if (value.statusCode == 200) {
+        return value.data;
+      } else {
+        return [];
+      }
+    }).catchError((error) => []);
     setState(() {
-      initOrder = temp;
-      order = temp;
+      initOrder = [...response];
+      order = [...response];
     });
   }
 
-  void deleteOrder(int index) {
-    setState(() {
-      order.removeAt(index);
-    });
+  void deleteOrder(int index) async {
+    await request(
+        RequestType.deleteRequest, apiURL + '/order/delete_order', widget.token,
+        body: {'uuid': order[index]['uuid']}).then((value) {
+      if (value.statusCode == 200) {
+        getData();
+      }
+    }).catchError((error) {});
   }
 
   @override
@@ -38,6 +54,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Template(
+      user: widget.user,
       child: Container(
         margin: const EdgeInsets.fromLTRB(25, 30, 25, 0),
         child: Column(
@@ -45,7 +62,7 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'Welcome User!',
+              'Welcome ${widget.user['first_name']} ${widget.user['last_name']}!',
               style: GoogleFonts.poppins(
                   textStyle: Theme.of(context).textTheme.headline2),
             ),
@@ -124,8 +141,9 @@ class _HomeState extends State<Home> {
                       .entries
                       .map((e) => OrderItem(
                             uuid: e.value['uuid'],
+                            image: e.value['image'],
                             name: e.value['name'],
-                            desc: e.value['desc'],
+                            desc: 'Total: ${e.value['total_price']} credits',
                             delete: () => deleteOrder(e.key),
                           ))
                       .toList(),

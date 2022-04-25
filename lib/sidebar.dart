@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SideBar extends StatelessWidget {
-  const SideBar({Key? key}) : super(key: key);
+  const SideBar({Key? key, required this.user}) : super(key: key);
+  final Map<String, dynamic> user;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class SideBar extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Welcome User!',
+                            'Welcome ${user['first_name']}!',
                             style: GoogleFonts.poppins(
                                 textStyle:
                                     Theme.of(context).textTheme.headline2),
@@ -54,7 +55,7 @@ class SideBar extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Staff ID: 5128654',
+                            'Credits: ${user['credit']}',
                             style: GoogleFonts.poppins(
                                 textStyle:
                                     Theme.of(context).textTheme.subtitle1),

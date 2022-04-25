@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NewOrder extends StatefulWidget {
-  const NewOrder({Key? key}) : super(key: key);
+  const NewOrder({Key? key, required this.token, required this.user})
+      : super(key: key);
+  final String token;
+  final Map<String, dynamic> user;
 
   @override
   State<NewOrder> createState() => _NewOrderState();
@@ -46,6 +49,7 @@ class _NewOrderState extends State<NewOrder> {
           .map((e) => FoodItem(
                 key: Key(e.key.toString()),
                 name: e.value['name'],
+                image: e.value['image'],
                 desc: e.value['desc'],
                 quantity: e.value['quantity'],
                 editQuantity: (quantity) => editItem(e.key, quantity),
@@ -53,10 +57,12 @@ class _NewOrderState extends State<NewOrder> {
           .toList()
     ];
     children.add(AddMore(
+      token: widget.token,
       addAction: (p0, p1, p2, p3) => addItem(p0, p1, p2, p3),
     ));
 
     return Template(
+      user: widget.user,
       warning: item.isNotEmpty,
       child: Container(
         margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
