@@ -4,6 +4,7 @@ import 'package:dispenser_mobile_app/order_item.dart';
 import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key, required this.token, required this.user})
@@ -18,8 +19,11 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Map<String, dynamic>> initOrder = [];
   List<Map<String, dynamic>> order = [];
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   void getData() async {
+    print('Get Data');
     var response = await request(
             RequestType.getRequest, apiURL + '/order/my_orders', widget.token)
         .then((value) {
@@ -33,6 +37,11 @@ class _HomeState extends State<Home> {
       initOrder = [...response];
       order = [...response];
     });
+  }
+
+  void _onRefresh() {
+    getData();
+    _refreshController.refreshCompleted();
   }
 
   void deleteOrder(int index) async {
@@ -133,20 +142,26 @@ class _HomeState extends State<Home> {
               ],
             ),
             Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: order
-                      .asMap()
-                      .entries
-                      .map((e) => OrderItem(
-                            uuid: e.value['uuid'],
-                            image: e.value['image'],
-                            name: e.value['name'],
-                            desc: 'Total: ${e.value['total_price']} credits',
-                            delete: () => deleteOrder(e.key),
-                          ))
-                      .toList(),
+              child: SmartRefresher(
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                enablePullUp: false,
+                enablePullDown: true,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: order
+                        .asMap()
+                        .entries
+                        .map((e) => OrderItem(
+                              uuid: e.value['uuid'],
+                              image: e.value['image'],
+                              name: e.value['name'],
+                              desc: 'Total: ${e.value['total_price']} credits',
+                              delete: () => deleteOrder(e.key),
+                            ))
+                        .toList(),
+                  ),
                 ),
               ),
             ),

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 const duration = Duration(milliseconds: 200);
+// const baseURL = 'https://thay-tam.herokuapp.com';
 const baseURL = 'http://10.0.2.2:3109';
 const apiURL = baseURL + '/api/v1';
 

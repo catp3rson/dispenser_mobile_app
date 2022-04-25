@@ -1,3 +1,4 @@
+import 'package:dispenser_mobile_app/API.dart';
 import 'package:dispenser_mobile_app/food_item.dart';
 import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class NewOrder extends StatefulWidget {
 
 class _NewOrderState extends State<NewOrder> {
   List<Map<String, dynamic>> item = [];
+  String name = 'Enter a name';
 
   void editItem(int index, int quantity) {
     if (quantity > 0) {
@@ -28,15 +30,72 @@ class _NewOrderState extends State<NewOrder> {
     }
   }
 
-  void addItem(String uuid, String name, String desc, int quantity) {
+  void addItem(Map<String, dynamic> i) {
     setState(() {
-      item.add({
-        'uuid': uuid,
-        'name': name,
-        'desc': desc,
-        'quantity': quantity,
-      });
+      item.add(i);
     });
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('AlertDialog Title'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('This is a demo alert dialog.'),
+                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Approve'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void submit() async {
+    final curItem = [...item];
+
+    var itemUUID = '', quantity = '';
+    for (var e in curItem) {
+      itemUUID += '${e['item']['uuid']},';
+      quantity += '${e['quantity']},';
+    }
+    if (itemUUID.isNotEmpty) {
+      itemUUID = itemUUID.substring(0, itemUUID.length - 1);
+    }
+    if (quantity.isNotEmpty) {
+      quantity = quantity.substring(0, quantity.length - 1);
+    }
+    await request(
+      RequestType.putRequest,
+      apiURL + '/order/edit_order',
+      widget.token,
+      body: {
+        'name': name,
+        'item_uuid': itemUUID,
+        'quantity': quantity,
+      },
+    ).then((value) {
+      _showMyDialog();
+    }).catchError((e) => print(e));
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -48,9 +107,9 @@ class _NewOrderState extends State<NewOrder> {
           .entries
           .map((e) => FoodItem(
                 key: Key(e.key.toString()),
-                name: e.value['name'],
-                image: e.value['image'],
-                desc: e.value['desc'],
+                name: e.value['item']['name'],
+                image: e.value['item']['image'],
+                price: e.value['item']['price'],
                 quantity: e.value['quantity'],
                 editQuantity: (quantity) => editItem(e.key, quantity),
               ))
@@ -58,7 +117,7 @@ class _NewOrderState extends State<NewOrder> {
     ];
     children.add(AddMore(
       token: widget.token,
-      addAction: (p0, p1, p2, p3) => addItem(p0, p1, p2, p3),
+      addAction: (i) => addItem(i),
     ));
 
     return Template(
@@ -76,7 +135,10 @@ class _NewOrderState extends State<NewOrder> {
                   width: 200,
                   child: TextField(
                     focusNode: textFocusNode,
-                    controller: TextEditingController(text: "Enter a name"),
+                    controller: TextEditingController(text: name),
+                    onSubmitted: (value) => setState(() {
+                      name = value;
+                    }),
                     style: GoogleFonts.poppins(
                         textStyle: Theme.of(context).textTheme.headline2),
                     decoration: InputDecoration(
@@ -114,7 +176,7 @@ class _NewOrderState extends State<NewOrder> {
                       ),
                       onPressed: item.isNotEmpty
                           ? () {
-                              Navigator.pop(context);
+                              submit();
                             }
                           : () {},
                     ),

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:dispenser_mobile_app/API.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +12,13 @@ class FoodItem extends StatelessWidget {
     Key? key,
     required this.name,
     required this.image,
-    required this.desc,
+    required this.price,
     required this.quantity,
     required this.editQuantity,
   }) : super(key: key);
   final String name;
   final String image;
-  final String desc;
+  final int price;
   final int quantity;
   final Function(int) editQuantity;
 
@@ -115,7 +117,7 @@ class FoodItem extends StatelessWidget {
                             style: Theme.of(context).textTheme.headline4,
                           ),
                           Text(
-                            desc,
+                            'Price: ${price.toString()} Credits',
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
                         ],
@@ -186,7 +188,7 @@ class AddMore extends StatelessWidget {
   const AddMore({Key? key, required this.token, required this.addAction})
       : super(key: key);
   final String token;
-  final Function(String, String, String, int) addAction;
+  final Function(Map<String, dynamic>) addAction;
 
   @override
   Widget build(BuildContext context) {
@@ -200,11 +202,10 @@ class AddMore extends StatelessWidget {
                   uuid: e['uuid'],
                   image: e['image'],
                   name: e['name'],
-                  desc: '${e['price'].toString()}  Credits',
-                  addAction: (p0, p1, p2, p3) => addAction(p0, p1, p2, p3),
+                  price: e['price'],
+                  addAction: (i) => addAction(i),
                 ))
             .toList();
-        print(children);
         var length = food.length;
         showModalBottomSheet<void>(
           context: context,
@@ -297,14 +298,14 @@ class AddItem extends StatelessWidget {
       required this.uuid,
       required this.image,
       required this.name,
-      required this.desc,
+      required this.price,
       required this.addAction})
       : super(key: key);
   final String uuid;
   final String image;
   final String name;
-  final String desc;
-  final Function(String, String, String, int) addAction;
+  final int price;
+  final Function(Map<String, dynamic>) addAction;
 
   @override
   Widget build(BuildContext context) {
@@ -359,7 +360,7 @@ class AddItem extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  desc,
+                  '${price.toString()}  Credits',
                   style: GoogleFonts.poppins(
                       textStyle: Theme.of(context).textTheme.subtitle2),
                 ),
@@ -390,7 +391,15 @@ class AddItem extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15.0)),
                       ),
                       onPressed: () {
-                        addAction(uuid, name, desc, 1);
+                        addAction({
+                          'item': {
+                            'uuid': uuid,
+                            'image': image,
+                            'name': name,
+                            'price': price,
+                          },
+                          'quantity': 1,
+                        });
                         Navigator.pop(context);
                       }),
                 ),
