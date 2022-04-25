@@ -101,7 +101,7 @@ class _TemplateState extends State<Template> {
             icon: Image.asset('images/avt.png'),
             onPressed: widget.profile
                 ? () {
-                    Navigator.pushReplacementNamed(context, '/profile');
+                    Navigator.pushNamed(context, '/profile');
                   }
                 : () {},
           )
@@ -110,8 +110,7 @@ class _TemplateState extends State<Template> {
         elevation: 0,
       ),
       drawer: const SideBar(),
-      body: Container(
-          margin: const EdgeInsets.only(bottom: 15.0), child: widget.child),
+      body: widget.child,
       drawerEnableOpenDragGesture: false,
     );
   }

@@ -30,7 +30,6 @@ class ProfilePage extends StatelessWidget {
     return Template(
       title: 'Profile',
       profile: false,
-      isDrawer: true,
       child: Column(
         children: [
           Container(

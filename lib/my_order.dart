@@ -86,11 +86,6 @@ class _MyOrderState extends State<MyOrder> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.center,
-              child: Image.asset('images/qr.png', fit: BoxFit.contain),
-            ),
-            const SizedBox(height: 10),
             Row(
               children: [
                 SizedBox(
@@ -160,6 +155,52 @@ class _MyOrderState extends State<MyOrder> {
                     child: Column(
               children: children,
             ))),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Total cost:',
+                      style: GoogleFonts.poppins(
+                              textStyle: Theme.of(context).textTheme.subtitle1)
+                          .copyWith(
+                        fontSize: 15,
+                      )),
+                  const SizedBox(width: 10),
+                  Text('6 cred',
+                      style: GoogleFonts.poppins(
+                              textStyle: Theme.of(context).textTheme.headline4)
+                          .copyWith(
+                        fontSize: 15,
+                      )),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          padding: const EdgeInsets.all(5),
+                          fixedSize: const Size(100, 50),
+                          alignment: Alignment.center,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                        ),
+                        child: Text('CHECKOUT',
+                            style: GoogleFonts.poppins(
+                                textStyle: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.2,
+                            ))),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
