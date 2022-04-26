@@ -53,13 +53,10 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    getData();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    if (initOrder.isEmpty) {
+      getData();
+    }
     return Template(
       user: widget.user,
       child: Container(

@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
       onLogin: _authUser,
       onSignup: _signupUser,
       onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushReplacementNamed('/');
+        Navigator.of(context).pushReplacementNamed('/home');
       },
       onRecoverPassword: _recoverPassword,
     );

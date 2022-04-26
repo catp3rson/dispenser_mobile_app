@@ -21,7 +21,25 @@ class SimplePieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return charts.PieChart<String>(seriesList, animate: animate);
+    return charts.PieChart<String>(
+      seriesList,
+      animate: animate,
+      defaultRenderer: charts.ArcRendererConfig(
+        arcWidth: 120,
+        arcRendererDecorators: [charts.ArcLabelDecorator()],
+      ),
+      behaviors: [
+        charts.DatumLegend(
+          position: charts.BehaviorPosition.bottom,
+          outsideJustification: charts.OutsideJustification.middleDrawArea,
+          horizontalFirst: false,
+          desiredMaxRows: 2,
+          cellPadding: const EdgeInsets.only(left: 15.0, bottom: 4.0),
+          entryTextStyle: charts.TextStyleSpec(
+              color: charts.MaterialPalette.purple.shadeDefault, fontSize: 12),
+        )
+      ],
+    );
   }
 
   /// Create one series with sample hard coded data.
@@ -36,7 +54,7 @@ class SimplePieChart extends StatelessWidget {
     return [
       charts.Series<LinearSales, String>(
         id: 'Sales',
-        domainFn: (LinearSales sales, _) => sales.year,
+        domainFn: (LinearSales sales, _) => sales.name,
         measureFn: (LinearSales sales, _) => sales.sales,
         colorFn: (LinearSales sales, _) => sales.color,
         data: data,
@@ -47,9 +65,9 @@ class SimplePieChart extends StatelessWidget {
 
 /// Sample linear data type.
 class LinearSales {
-  final String year;
+  final String name;
   final int sales;
   final charts.Color color;
 
-  LinearSales(this.year, this.sales, this.color);
+  LinearSales(this.name, this.sales, this.color);
 }

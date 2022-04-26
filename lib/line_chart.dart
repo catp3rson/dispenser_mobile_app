@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
@@ -20,13 +22,21 @@ class TimeSeriesRangeAnnotationChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<TimeSeriesSales> dateList =
+        seriesList[0].data as List<TimeSeriesSales>;
+    var endDate = dateList
+        .reduce((cur, next) => cur.time.compareTo(next.time) > 0 ? cur : next)
+        .time;
+    var startDate = dateList
+        .reduce((cur, next) => cur.time.compareTo(next.time) < 0 ? cur : next)
+        .time;
     return charts.TimeSeriesChart(
       seriesList,
       animate: animate,
       behaviors: [
         charts.RangeAnnotation([
-          charts.RangeAnnotationSegment(DateTime(2017, 10, 4),
-              DateTime(2017, 10, 15), charts.RangeAnnotationAxisType.domain),
+          charts.RangeAnnotationSegment(
+              startDate, endDate, charts.RangeAnnotationAxisType.domain),
         ]),
       ],
     );
@@ -61,4 +71,9 @@ class TimeSeriesSales {
   final int data;
 
   TimeSeriesSales(this.time, this.data);
+
+  @override
+  String toString() {
+    return 'TimeSeriesSales{time: $time, data: $data}';
+  }
 }

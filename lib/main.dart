@@ -39,13 +39,13 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Dispenser Mobile App',
       theme: themeApp,
-      initialRoute: '/history',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => LoginScreen(
               setAuth: setAuth,
               setUser: setUser,
             ),
-        '/': (context) => Home(
+        '/home': (context) => Home(
               token: auth,
               user: user,
             ),
