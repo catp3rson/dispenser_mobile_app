@@ -81,6 +81,10 @@ class SideBar extends StatelessWidget {
                 }),
                 item('History', Icons.history_edu_outlined, () {
                   Navigator.pop(context);
+                  final temp = ModalRoute.of(context)?.settings.name;
+                  if (temp != '/history') {
+                    Navigator.pushReplacementNamed(context, '/history');
+                  }
                 }),
                 item('Settings', Icons.settings_outlined, () {
                   Navigator.pop(context);

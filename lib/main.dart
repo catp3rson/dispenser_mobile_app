@@ -1,3 +1,4 @@
+import 'package:dispenser_mobile_app/history.dart';
 import 'package:dispenser_mobile_app/my_order.dart';
 import 'package:dispenser_mobile_app/new_order.dart';
 import 'package:dispenser_mobile_app/home.dart';
@@ -38,7 +39,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Dispenser Mobile App',
       theme: themeApp,
-      initialRoute: '/login',
+      initialRoute: '/history',
       routes: {
         '/login': (context) => LoginScreen(
               setAuth: setAuth,
@@ -57,6 +58,10 @@ class _MyAppState extends State<MyApp> {
               user: user,
             ),
         '/profile': (context) => ProfilePage(
+              user: user,
+            ),
+        '/history': (context) => HistoryPage(
+              token: auth,
               user: user,
             ),
       },
