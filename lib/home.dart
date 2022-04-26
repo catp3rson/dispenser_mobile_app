@@ -22,7 +22,6 @@ class _HomeState extends State<Home> {
       RefreshController(initialRefresh: false);
 
   void getData() async {
-    print('Get Data');
     var response = await request(
             RequestType.getRequest, apiURL + '/order/my_orders', widget.token)
         .then((value) {

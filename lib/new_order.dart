@@ -36,34 +36,6 @@ class _NewOrderState extends State<NewOrder> {
     });
   }
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('AlertDialog Title'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text('This is a demo alert dialog.'),
-                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Approve'),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/');
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void submit() async {
     final curItem = [...item];
 
@@ -88,8 +60,10 @@ class _NewOrderState extends State<NewOrder> {
         'quantity': quantity,
       },
     ).then((value) {
-      _showMyDialog();
-    }).catchError((e) => print(e));
+      showMyDialog(
+          context, 'Success', 'Order has successfully been created', () {});
+    }).catchError((e) =>
+        showMyDialog(context, 'Error', 'Error detail: ${e.toString()}', () {}));
   }
 
   @override

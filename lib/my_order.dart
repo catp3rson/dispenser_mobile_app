@@ -22,34 +22,6 @@ class _MyOrderState extends State<MyOrder> {
   List<Map<String, dynamic>> initItem = [];
   List<Map<String, dynamic>> item = [];
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('AlertDialog Title'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text('This is a demo alert dialog.'),
-                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Approve'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void getData() async {
     List<Map<String, dynamic>> deepCopy(List<dynamic> list) {
       return list.map((e) => Map<String, dynamic>.from(e)).toList();
@@ -64,7 +36,8 @@ class _MyOrderState extends State<MyOrder> {
               name = value.data['name'];
               tempName = value.data['name'];
             }))
-        .catchError((e) => print(e));
+        .catchError((e) => showMyDialog(
+            context, 'Error', 'Error detail: ${e.toString()}', () {}));
   }
 
   void editItem(int index, int quantity) {
@@ -144,10 +117,10 @@ class _MyOrderState extends State<MyOrder> {
         'quantity': quantity,
       },
     ).then((value) {
-      _showMyDialog();
+      showMyDialog(
+          context, 'Success', 'Order has successfully been edited', () {});
     }).catchError((e) {
-      print(e);
-      getData();
+      showMyDialog(context, 'Error', 'Error detail: ${e.toString()}', getData);
     });
   }
 
