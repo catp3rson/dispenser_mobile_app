@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 const duration = Duration(milliseconds: 200);
 // const baseURL = 'https://thay-tam.herokuapp.com';
@@ -7,7 +7,7 @@ const baseURL = 'http://10.0.2.2:3109';
 const apiURL = baseURL + '/api/v1';
 
 class UUIDArgument {
-  final dynamic uuid;
+  final String uuid;
 
   UUIDArgument(this.uuid);
 }
@@ -31,37 +31,28 @@ Future request(RequestType type, String url, String token,
   }
 }
 
-Future<List<Map<String, dynamic>>> getOrder() => Future.delayed(
-    duration,
-    () => List.generate(
-        8,
-        (index) => {
-              'uuid': 'uuid_$index',
-              'name': 'My order ' + (index + 1).toString(),
-              'desc': 'Coke',
-            }));
-
-Future<List<Map<String, dynamic>>> getFoodShop() => Future.delayed(
-    duration,
-    () => List.generate(
-        13,
-        (i) => {
-              'uuid': 'uuid_' + (i + 1).toString(),
-              'name': 'Coke ' + (i + 69).toString(),
-              'desc': 'Drinks',
-            }));
-
-Future<Map<String, dynamic>> getOrderDetail() => Future.delayed(
-      duration,
-      () => {
-        'name': 'My order',
-        'item': List.generate(
-            15,
-            (i) => {
-                  'uuid': 'uuid_' + (i + 1).toString(),
-                  'name': 'Coke ' + i.toString(),
-                  'desc': 'Drinks',
-                  'quantity': i + 1,
-                })
-      },
-    );
+Future<void> showMyDialog(BuildContext context, String title, String message,
+    Function approveFunc) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          title,
+          style: Theme.of(context).textTheme.headline1,
+        ),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Approve'),
+            onPressed: () {
+              approveFunc();
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}

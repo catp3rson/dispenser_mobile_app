@@ -55,8 +55,7 @@ class _NewOrderState extends State<NewOrder> {
             TextButton(
               child: const Text('Approve'),
               onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/');
               },
             ),
           ],

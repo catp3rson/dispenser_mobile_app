@@ -4,7 +4,6 @@ import 'package:dispenser_mobile_app/template.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:collection/collection.dart';
-import 'dart:convert';
 
 class MyOrder extends StatefulWidget {
   const MyOrder({Key? key, required this.user, required this.token})
@@ -300,7 +299,19 @@ class _MyOrderState extends State<MyOrder> {
                               fontWeight: FontWeight.bold,
                               letterSpacing: 0.2,
                             ))),
-                        onPressed: () {},
+                        onPressed: () {
+                          final arg = ModalRoute.of(context)!.settings.arguments
+                              as UUIDArgument;
+                          showModalBottomSheet<void>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return MachineMenu(
+                                token: widget.token,
+                                orderUUID: arg.uuid,
+                              );
+                            },
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -311,6 +322,166 @@ class _MyOrderState extends State<MyOrder> {
         ),
       ),
       title: 'My order',
+    );
+  }
+}
+
+class MachineMenu extends StatefulWidget {
+  const MachineMenu({Key? key, required this.token, required this.orderUUID})
+      : super(key: key);
+  final String token;
+  final String orderUUID;
+
+  @override
+  State<MachineMenu> createState() => _MachineMenuState();
+}
+
+class _MachineMenuState extends State<MachineMenu> {
+  List<Map<String, dynamic>> machines = [];
+
+  void getData() async {
+    request(RequestType.getRequest, apiURL + '/machine/all', widget.token)
+        .then((value) => setState(() => machines = [...value.data]));
+  }
+
+  void selectMachine(String uuid) {
+    request(RequestType.putRequest, apiURL + '/order/checkout', widget.token,
+        body: {
+          'order_uuid': widget.orderUUID,
+          'machine_uuid': uuid,
+        }).then((value) => showMyDialog(
+          context,
+          'Success',
+          'Order has successfully been checked out',
+          () => Navigator.pop(context),
+        ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (machines.isEmpty) {
+      getData();
+    }
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.6,
+      color: Theme.of(context).backgroundColor,
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              'Choose a machine',
+              style: GoogleFonts.poppins(
+                  textStyle: GoogleFonts.poppins(
+                      textStyle: Theme.of(context).textTheme.headline2)),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+                child: SingleChildScrollView(
+              child: Column(
+                children: machines.map((machine) {
+                  return MachineItem(
+                    name: machine['name'],
+                    select: () => selectMachine(machine['uuid']),
+                  );
+                }).toList(),
+              ),
+            ))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MachineItem extends StatelessWidget {
+  const MachineItem({Key? key, required this.name, required this.select})
+      : super(key: key);
+  final String name;
+  final VoidCallback select;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: Container(
+        height: 70,
+        margin: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              offset: const Offset(2, 2),
+              blurRadius: 1.0,
+              spreadRadius: 0.0,
+            )
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Image.asset(
+                  'images/machine.png',
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.fill,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                    Text(
+                      'Dispenser machine',
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      padding: const EdgeInsets.all(5),
+                      fixedSize: const Size(80, 30),
+                      alignment: Alignment.center,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0)),
+                    ),
+                    child: Text('Select',
+                        style: GoogleFonts.poppins(
+                            textStyle: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.2,
+                        ))),
+                    onPressed: () {
+                      select();
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

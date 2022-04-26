@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:dispenser_mobile_app/API.dart';
 import 'package:dispenser_mobile_app/order_item.dart';
 import 'package:dispenser_mobile_app/template.dart';

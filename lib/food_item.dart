@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:dispenser_mobile_app/API.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
