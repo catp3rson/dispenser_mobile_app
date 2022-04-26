@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
@@ -37,6 +35,7 @@ class TimeSeriesRangeAnnotationChart extends StatelessWidget {
           tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
               day: charts.TimeFormatterSpec(
                   format: 'd', transitionFormat: 'MM/dd/yyyy'))),
+      defaultRenderer: charts.LineRendererConfig(includePoints: true),
       behaviors: [
         charts.RangeAnnotation([
           charts.RangeAnnotationSegment(
