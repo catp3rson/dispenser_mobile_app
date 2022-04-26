@@ -33,6 +33,10 @@ class TimeSeriesRangeAnnotationChart extends StatelessWidget {
     return charts.TimeSeriesChart(
       seriesList,
       animate: animate,
+      domainAxis: const charts.DateTimeAxisSpec(
+          tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
+              day: charts.TimeFormatterSpec(
+                  format: 'd', transitionFormat: 'MM/dd/yyyy'))),
       behaviors: [
         charts.RangeAnnotation([
           charts.RangeAnnotationSegment(
