@@ -18,11 +18,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Duration get loginTime => const Duration(milliseconds: 200);
 
   Future<String?> _authUser(LoginData data) {
+    if (data.name == '' || data.password == '') {
+      return Future.value('Please enter your username and password');
+    }
     var dio = Dio();
     var url = apiURL + '/account/signin';
     return dio.post(url, data: {
-      "email": "hig@emovaw.za",
-      "password": "hig@emovaw.za"
+      "email": data.name,
+      "password": data.password,
     }).then((response) async {
       if (response.statusCode == 200) {
         setState(() {
@@ -35,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         return '${response.statusCode}: ${response.statusMessage}';
       }
-    }).catchError((e) => e);
+    }).catchError((e) => Future.value('${e.response.data['detail']}'));
   }
 
   String? _validateUser(String? user) {
@@ -47,9 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<String?> _signupUser(SignupData data) {
-    return Future.delayed(loginTime).then((_) {
-      return null;
-    });
+    return Future.value('Not implemented');
   }
 
   Future<String?> _recoverPassword(String name) {
