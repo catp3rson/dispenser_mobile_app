@@ -319,15 +319,33 @@ class _MachineMenuState extends State<MachineMenu> {
 
   void selectMachine(String uuid) {
     request(RequestType.putRequest, apiURL + '/order/checkout', widget.token,
-        body: {
+            body: {
           'order_uuid': widget.orderUUID,
           'machine_uuid': uuid,
-        }).then((value) => showMyDialog(
+        })
+        .then((value) => showMyDialog(
+              context,
+              'Success',
+              'Order has successfully been checked out',
+              () => Navigator.pop(context),
+            ))
+        .catchError((e) {
+      if (e.response.statusCode == 400) {
+        showMyDialog(
           context,
-          'Success',
-          'Order has successfully been checked out',
+          'Error',
+          'Insufficient credits',
           () => Navigator.pop(context),
-        ));
+        );
+      } else {
+        showMyDialog(
+          context,
+          'Error',
+          'Something went wrong',
+          () => Navigator.pop(context),
+        );
+      }
+    });
   }
 
   @override
