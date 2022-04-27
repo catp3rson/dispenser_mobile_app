@@ -39,7 +39,6 @@ class _HomeState extends State<Home> {
 
   void _onRefresh() {
     getData();
-    _refreshController.refreshCompleted();
   }
 
   void deleteOrder(int index) async {
@@ -57,6 +56,7 @@ class _HomeState extends State<Home> {
     if (initOrder.isEmpty) {
       getData();
     }
+    _refreshController.refreshCompleted();
     return Template(
       user: widget.user,
       child: Container(

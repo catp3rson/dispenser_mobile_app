@@ -35,7 +35,6 @@ class _HistoryPageState extends State<HistoryPage> {
 
   void _onRefresh() {
     getData();
-    _refreshController.refreshCompleted();
   }
 
   charts.Color _adjustColor(Color color, double amount) {
@@ -395,6 +394,7 @@ class _HistoryPageState extends State<HistoryPage> {
       getData();
     } else {
       if (item.isNotEmpty) {
+        _refreshController.refreshCompleted();
         return historyTemplate(context, [
           getChart(
             ChartType.pie,
