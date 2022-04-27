@@ -316,7 +316,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            'From ${dateToString(fromDate)}',
+                            'From: ${dateToString(fromDate)}',
                             style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.bold,
@@ -336,7 +336,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            'To ${dateToString(toDate)}',
+                            'To: ${dateToString(toDate)}',
                             style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.bold,
@@ -351,28 +351,36 @@ class _HistoryPageState extends State<HistoryPage> {
                       ),
                       onPressed: () => {_selectDate(context, WhichDate.to)},
                     ),
-                    TextButton(
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
                       style: TextButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor,
                         padding: const EdgeInsets.all(5),
-                        fixedSize: const Size(50, 30),
+                        fixedSize: const Size(20, 30),
                         alignment: Alignment.center,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0)),
                       ),
-                      child: Text('Done',
-                          style: GoogleFonts.poppins(
-                              textStyle: const TextStyle(
-                            fontSize: 13,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.2,
-                          ))),
+                      child: Text(
+                        'Done',
+                        style: GoogleFonts.poppins(
+                            textStyle: const TextStyle(
+                          fontSize: 10,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.2,
+                        )),
+                      ),
                       onPressed: () {
                         getData();
                       },
                     ),
-                  ],
+                  ),
                 ),
                 ...children,
               ],
