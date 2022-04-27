@@ -31,8 +31,9 @@ Future request(RequestType type, String url, String token,
   }
 }
 
-Future<void> showMyDialog(BuildContext context, String title, String message,
-    Function approveFunc) async {
+Future<void> showMyDialog(
+    BuildContext context, String title, String message, Function approveFunc,
+    [bool pop = true]) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -48,7 +49,7 @@ Future<void> showMyDialog(BuildContext context, String title, String message,
             child: const Text('Approve'),
             onPressed: () {
               approveFunc();
-              Navigator.of(context).pop();
+              if (pop) Navigator.of(context).pop();
             },
           ),
         ],

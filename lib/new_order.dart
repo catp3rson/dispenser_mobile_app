@@ -60,8 +60,10 @@ class _NewOrderState extends State<NewOrder> {
         'quantity': quantity,
       },
     ).then((value) {
-      showMyDialog(
-          context, 'Success', 'Order has successfully been created', () {});
+      showMyDialog(context, 'Success', 'Order has successfully been created',
+          () {
+        Navigator.pushReplacementNamed(context, '/home');
+      }, false);
     }).catchError((e) =>
         showMyDialog(context, 'Error', 'Error detail: ${e.toString()}', () {}));
   }
